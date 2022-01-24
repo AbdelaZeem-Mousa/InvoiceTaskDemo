@@ -1,0 +1,89 @@
+﻿@model IEnumerable<Afaky.Models.InvoiceMasterViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row" style=" text-align: right; direction: rtl;">
+    <div class="col-lg-2">
+        <br />
+        <p>
+            <a asp-action="Create" class="btn btn-primary" style="padding:10%">اضافة جديد</a>
+        </p>
+        </div>
+    </div>
+    <table class="table table-striped" dir="rtl" style=" text-align: right; direction: rtl;">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    م
+                </th>
+                <th>
+                    العميل
+                </th>
+                <th>
+                    المخزن
+                </th>
+                <th>
+                    تاريخ الفاتورة
+                </th>
+                <th>
+                    الوصف
+                </th>
+                <th>
+                    الاجمالى
+                </th>
+                <th>
+                    نسبة الخصم
+                </th>
+                <th>
+                    قيمة الخصم
+                </th>
+                <th>
+                    الصافى
+                </th>
+
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="thead-light">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StoreName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateInvoice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Notes)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SumPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiscountPrecent)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiscountVal)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Net)
+                    </td>
+
+                    <td>
+
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

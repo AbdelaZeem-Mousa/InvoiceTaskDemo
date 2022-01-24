@@ -1,0 +1,121 @@
+﻿@model Afaky.Models.InvoiceMasterViewModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<div>
+    <h4>Invoice</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CustomerName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StoreName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StoreName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DateInvoice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DateInvoice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SumPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SumPrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DiscountPrecent)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DiscountPrecent)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DiscountVal)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DiscountVal)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Net)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Net)
+        </dd>
+
+
+    </dl>
+    <table class="table table-responsive-lg">
+        <thead>
+            <tr>
+                <td>
+                    ProductName
+                </td>
+
+                <td>
+                    Qty
+                </td>
+
+                <td>
+                    Price
+                </td>
+
+                <td>
+                    Total
+                </td>
+            </tr>
+        </thead>
+        @if (@Model.Details.Count > 0)
+        {
+    <tbody>
+        @for (int i = 0; i < Model.Details.Count; i++)
+        {
+            <tr>
+                <td>
+                    @Model.Details[i].ProductName
+                </td>
+
+                <td>
+                    @Model.Details[i].Qty
+                </td>
+
+                <td>
+                    @Model.Details[i].Price
+                </td>
+
+                <td>
+                    @Model.Details[i].Total
+                </td>
+            </tr>
+        }
+
+    </tbody>
+        }
+    </table>
+</div>
+<div>
+    @Html.ActionLink("Delete", "Deleted", new { id = Model.Id }) |
+    <a asp-action="Index">Back to List</a>
+</div>

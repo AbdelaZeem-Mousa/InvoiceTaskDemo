@@ -1,0 +1,362 @@
+﻿@model Afaky.Models.InvoiceMasterViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+
+<div class="row" style=" text-align: right; direction: rtl;">
+    <div class="col-lg-3"></div>
+
+    <div class="col-lg-6">
+
+        @Html.DropDownListFor(m => m.Id, new SelectList(ViewBag.Invoice, "Id", "Notes"), "اختر", new { @class = "form-control ", @id = "InvoiceId" })
+
+    </div>
+
+    <div class="col-lg-3"></div>
+
+    <hr />
+    <form asp-action="Create">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @Html.HiddenFor(a => a.Id, new { @id = "hiddenId" })
+        <div class="form-body">
+            <div class="row">
+                <div class="col-md-6 ">
+                    <div class="form-group">
+
+                        <label asp-for="CustomerId" class="control-label"></label>
+                        @Html.DropDownListFor(m => m.CustomerId, new SelectList(ViewBag.Customer, "Id", "Name"), new { @class = "form-control select2", @id = "CustId" })
+                        <span asp-validation-for="CustomerId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 ">
+                    <div class="form-group">
+                        <label asp-for="StoreId" class="control-label"></label>
+
+                        @Html.DropDownListFor(m => m.StoreId, new SelectList(ViewBag.Store, "Id", "Name"), new { @class = "form-control select2", @id = "StoreId" })
+                        <span asp-validation-for="StoreId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 ">
+                    <div class="form-group">
+                        <label asp-for="DateInvoice" class="control-label"></label>
+                        <input asp-for="DateInvoice" class="form-control" />
+                        <span asp-validation-for="DateInvoice" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 ">
+                    <div class="form-group">
+                        <label asp-for="Notes" class="control-label"></label>
+                        <input asp-for="Notes" class="form-control" />
+                        <span asp-validation-for="Notes" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 ">
+                    <div class="form-group">
+                        <label asp-for="SumPrice " class="control-label"></label>
+                        <input asp-for="SumPrice" class="form-control" readonly />
+                        <span asp-validation-for="SumPrice" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 ">
+                    <div class="form-group">
+                        <label asp-for="DiscountPrecent" class="control-label"></label>
+                        <input asp-for="DiscountPrecent" class="form-control" />
+                        <span asp-validation-for="DiscountPrecent" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 ">
+                    <div class="form-group">
+                        <label asp-for="DiscountVal" class="control-label"></label>
+                        <input asp-for="DiscountVal" class="form-control" readonly />
+                        <span asp-validation-for="DiscountVal" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 ">
+                    <div class="form-group">
+                        <label asp-for="Net" class="control-label"></label>
+                        <input asp-for="Net" class="form-control" readonly />
+                        <span asp-validation-for="Net" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <div class="row">
+        <div class="col-md-12 ">
+            <table class="table-responsive-md">
+                <tr>
+                    <td>
+                        @Html.DropDownListFor(m => m.ProductId, new SelectList(ViewBag.Product, "Id", "Name"), "اختر", new { @class = "form-control select2", @id = "ProductId" })
+                        <center>@Html.ValidationMessageFor(a => a.ProductId)</center>
+
+
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Qty, new { @class = "form-control", Value = "1", type = "number", min = "1", step = "0.01", @id = "Qtytxt" })
+                        <center>@Html.ValidationMessageFor(a => a.Qty)</center>
+
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Price, new { @class = "form-control", Value = "1", type = "number", min = "1", step = "0.01", @id = "Pricetxt" })
+                        <center>@Html.ValidationMessageFor(a => a.Price)</center>
+
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Total, new { @class = "form-control", Value = "1", type = "number", min = "1", step = "0.01", @readonly = "true", @id = "Totaltxt" })
+                    </td>
+                    <td>
+                        <button id="btnadd" type="button" class="btn btn-sm btn-secondary visible" onclick="AddItem(this)">Add</button>
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-12 ">
+            <div class="table-responsive-lg">
+                <table class="table table-responsive" id="ExpTable">
+                    <thead>
+                        <tr>
+                            <td>م</td>
+                            <td>المنتج</td>
+                            <td>الكمية</td>
+                            <td>السعر</td>
+                            <td>الاجمالى</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit"  onclick="SaveInvoice(this)" value="حفظ" class="btn btn-primary" />|| <a class="btn btn-info" asp-action="Index">العودة للقائمة</a>
+    </div>
+ 
+</div>
+
+
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script>
+            $(document).ready(function () {
+
+                $('#InvoiceId').on('change',
+                    function () {
+                        if ($("#InvoiceId").val() != 0) {
+
+
+                            $.ajax({
+                                type: "get",
+                                url: "/Invoice/GetBuyId",
+                                data: { "id": $("#InvoiceId").val() },
+                                success: function (response) {
+                                    console.log(response);
+                                    $('#hiddenId').val(response.Id)
+                                    $('#CustId').val(response.CustomerId);
+                                    $('#CustId').trigger('change.select2');
+                                    $('#StoreId').val(response.StoreId);
+                                    $('#StoreId').trigger('change.select2');
+                                    $('#Notestxt').val(response.Notes);
+                                    $('#DateInvoice').val(response.DateInvoice);
+                                    $('#SumPrice').val(response.SumPrice);
+                                    $('#Notes').val(response.Notes);
+                                    $('#DiscountPrecent').val(response.DiscountPrecent);
+                                    $('#DiscountVal').val(response.DiscountVal);
+                                    $('#Net').val(response.Net);
+                                    $.each(response.Details, function (i, v) {
+
+                                        var button = '<button id="Remove" type="button" class="btn btn-sm btn-danger visible" onclick="DeleteItem(this)">Remove</button>';
+                                        $('#ExpTable tbody').append("<tr><td>" + response.Details[i].ProductId + "</td><td>" + response.Details[i].ProductName + "</td><td>" + response.Details[i].Qty + "</td><td>" + response.Details[i].Price + "</td><td>" + response.Details[i].Total + "</td><td>" + button + "</td></tr>");
+                                    }
+
+                                    )
+
+
+                                }
+                            });
+                        }
+                    });
+                $('#ProductId').on('change',
+                    function () {
+                        $.ajax({
+                            type: "get",
+                            url: "/Defult/GetProductPrice",
+                            async: true,
+                            data: { "id": $("#ProductId").val() },
+                            success: function (response) {
+                                console.log(response);
+                                $('#Pricetxt').val(response.Price);
+                                var price = response.Price;
+                                var qty = 1;
+                                $('#Qtytxt').val(qty);
+                                calcTotal(parseFloat(qty), parseFloat(price));
+
+
+
+                            }
+                        });
+                    });
+
+                $('#Qtytxt').on('change',
+                    function () {
+                        calcTotal($('#Qtytxt').val(), $('#Pricetxt').val());
+                    });
+                $('#Pricetxt').on('change',
+                    function () {
+                        calcTotal($('#Qtytxt').val(), $('#Pricetxt').val());
+                    });
+                $('#DiscountPrecent').on('change',
+                    function () {
+                        calcTotalInvoice(0)
+                    });
+                
+
+
+            });
+
+            function DeleteItem(btn) {
+           var f = $(btn).closest('tr');
+            $(btn).closest('tr').remove();
+            var total = parseFloat($(f).find("td:eq(4)").text()) * -1;
+            calcTotalInvoice(total)
+        }
+        function AddItem(btn) {
+            if ($('#ProductId').val() == 0 || $('#ProductId').val() == "" ) {
+                return false;
+                alert("برجاء تحديد الصنف");
+
+            }
+            if ($('#Qtytxt').val() == 0 || $('#Qtytxt').val() == "") {
+                alert("برجاء ادخال الكمية");
+
+                return false;
+            }
+            if ($('#Pricetxt').val() == 0 || $('#Pricetxt').val() == "" ) {
+                return false;
+                alert("برجاء ادخال السعر ");
+            }
+
+            var button = '<button id="Remove" type="button" class="btn btn-sm btn-danger visible" onclick="DeleteItem(this)">Remove</button>';
+            $('#ExpTable tbody').append("<tr><td>" + $('#ProductId').val() + "</td><td>" + $('#ProductId option:selected').text() + "</td><td>" + $('#Qtytxt').val() + "</td><td>" + $('#Pricetxt').val() + "</td><td>" + $('#Totaltxt').val() + "</td><td>" + button + "</td></tr>");
+            var total = $('#Totaltxt').val();
+            calcTotalInvoice(total)
+            caleritemdetails();
+        }
+
+        function calcTotal(amount, rate) {
+            var total = parseFloat(amount) * parseFloat(rate);
+            $('#Totaltxt').val(total);
+
+
+            }
+            function caleritemdetails() {
+
+                $('#Pricetxt').val('0');
+                $('#Qtytxt').val('0');
+                $('#ProductId').val(1);
+                $('#Totaltxt').val('0');
+
+            }
+
+            function calerinvoice() {
+
+                $('#hiddenId').val('0');
+                $('#CustId').val(1);
+                $('#StoreId').val(1);
+                $('#Notes').val();
+                $('#SumPrice').val('0');
+                $('#DiscountPrecent').val('0');
+                $('#DiscountVal').val('0');
+                $('#Net').val('0');
+                $("#ExpTable >  tbody > tr").empty();
+
+
+
+            }
+
+        function calcTotalInvoice(total) {
+            var sumold = parseFloat( $('#SumPrice').val());
+            var sumnew = parseFloat(sumold) + parseFloat(total);
+            $('#SumPrice').val(sumnew);
+            var discount = parseFloat($('#DiscountPrecent').val());
+            var discountVal = parseFloat(sumnew) * parseFloat(discount) / 100;
+            $('#DiscountVal').val(discountVal);
+            var net = parseFloat(sumnew) - parseFloat(discountVal);
+            $('#Net').val(net);
+            
+
+
+        }
+            function SaveInvoice(btn) {
+
+                if ($('#SumPrice').val() == 0 ) {
+                    alert("برجاء ادخال تفاصيل الفاتورة");
+                    return false;
+                }
+                if (!$('#Notestxt').val()) {
+                    alert("برجاء ادخال الوصف");
+                    return false;
+                }
+
+                var list = [];
+                $('#ExpTable').find("tr:gt(0)").each(function () {
+
+                    var result = {
+
+
+                        Id: 0,
+                        ProductId: $(this).find("td:eq(0)").text(),
+                        InvoiceMasterId: 0,
+                        Price: parseFloat($(this).find("td:eq(3)").text()),
+                        Qty: parseFloat($(this).find("td:eq(2)").text()),
+                        Total: parseFloat($(this).find("td:eq(4)").text())
+
+                    };
+                    list.push(result);
+
+                });
+
+
+
+                $.ajax({
+                    url: `/Defult/SaveInvoice`,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        Id: $('#hiddenId').val(),
+                        CustomerId: $('#CustId').val(),
+                        StoreId: $('#StoreId').val(),
+                        DateInvoice: $('#DateInvoice').val(),
+                        Notes: $('#Notes').val(),
+                        SumPrice: $('#SumPrice').val(),
+                        DiscountPrecent: $('#DiscountPrecent').val(),
+                        DiscountVal: $('#DiscountVal').val(),
+                        Net: $('#Net').val(),
+                        Details: list
+                    },
+                    success: function (res) {
+
+
+                        alert('تم الحفظ بنجاح');
+                        calerinvoice();
+                        location.reload(true);
+
+
+                    }
+
+                });
+            }
+
+    </script>
+        }
